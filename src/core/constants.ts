@@ -1,0 +1,1 @@
+export const DEFAULT_MAX_SEARCH_LIMIT = 51;

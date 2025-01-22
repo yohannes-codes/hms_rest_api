@@ -1,0 +1,197 @@
+{
+  "default": {
+    "type": "string",
+    "unique": false,
+    "required": false,
+    "default": null
+  },
+  "enums": {
+    "gender": ["male", "female"],
+    "jobTitles": [
+      "manager",
+      "supervisor",
+      "accountant",
+      "storekeeper",
+      "receptionist",
+      "housekeeper",
+      "laundry",
+      "chef",
+      "waiter",
+      "cleaner",
+      "security",
+      "maintenance",
+      "it",
+      "unknown"
+    ],
+    "employeeStatus": ["active", "inactive"],
+    "roomStatuses": ["available", "occupied", "maintenance"],
+    "roomTypes": ["single", "double", "suite"],
+    "reservationStatus": [
+      "waiting",
+      "checkedIn",
+      "early checkedOut",
+      "checkedOut",
+      "extended stay",
+      "late checkedOut",
+      "cancelled",
+      "noShow"
+    ],
+    "transactionMethods": [
+      "cash",
+      "mobile money",
+      "transfer",
+      "card",
+      "check",
+      "other"
+    ],
+    "currencies": ["USD", "EUR", "KES", "SSP", "ETB", "UGX", "TZS", "RWF"],
+    "expenseCategories": [
+      "salary",
+      "utilities",
+      "staff",
+      "housekeeping",
+      "governmentalFees",
+      "maintenance",
+      "marketing",
+      "operation",
+      "other"
+    ],
+    "expenseLabels": [
+      "electricity",
+      "water",
+      "gas",
+      "sewage",
+      "garbage",
+      "airtime",
+      "rent",
+      "salaries",
+      "supplies",
+      "equipment",
+      "taxes",
+      "permits",
+      "licenses",
+      "repairs",
+      "renovations",
+      "advertising",
+      "commissions",
+      "printing",
+      "stationery",
+      "transport",
+      "labour",
+      "bonus",
+      "food",
+      "other"
+    ]
+  },
+  "tables": {
+    "employees": {
+      "firstName": { "required": true },
+      "lastName": { "required": true },
+      "phone": { "required": true, "unique": true },
+      "idNumber": { "required": true, "unique": true },
+      "gender": { "type": "enums.gender", "required": true },
+      "birthDate": { "type": "date", "required": true },
+      "password": { "required": true },
+      "jobTitle": {
+        "type": "enums.jobTitle",
+        "default": "enums.jobTitle.unknown"
+      },
+      "startDate": { "type": "date", "default": "Date.today()" },
+      "status": {
+        "type": "enums.employeeStatus",
+        "default": "enums.employeeStatus.active"
+      },
+      "notes": {}
+    },
+    "rooms": {
+      "number": { "required": true, "unique": true },
+      "type": {
+        "type": "enums.roomTypes",
+        "default": "enums.roomTypes.single"
+      },
+      "status": {
+        "type": "enums.roomStatuses",
+        "default": "enums.roomStatuses.available"
+      },
+      "isClean": { "type": "boolean", "default": false },
+      "price": { "type": "number" },
+      "notes": {}
+    },
+    "guests": {
+      "firstName": { "required": true },
+      "lastName": { "required": true },
+      "phone": { "required": true, "unique": true },
+      "email": {},
+      "idNumber": { "required": true, "unique": true },
+      "nationality": { "required": true },
+      "notes": {}
+    },
+    "   ": {
+      "roomId": {
+        "type": "tables.rooms",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "guestId": {
+        "type": "tables.guests",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "employeeId": {
+        "type": "tables.employees",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "checkIn": { "type": "date", "required": true },
+      "checkOut": { "type": "date" },
+      "status": {
+        "type": "enums.reservationStatus",
+        "default": "enums.reservationStatus.active"
+      },
+      "price": { "type": "number", "required": true },
+      "notes": {}
+    },
+    "transactions": {
+      "reservationId": {
+        "type": "tables.reservations",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "employeeId": {
+        "type": "tables.employees",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "approvedBy": {
+        "type": "tables.employees",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "date": { "type": "date", "required": true },
+      "amount": { "type": "number", "required": true },
+      "method": { "type": "enums.transactionMethods", "default": "cash" },
+      "currency": { "type": "enums.currencies", "required": true },
+      "reference": {},
+      "notes": {}
+    },
+    "expenses": {
+      "employeeId": {
+        "type": "tables.employees",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "approvedBy": {
+        "type": "tables.employees",
+        "required": true,
+        "onDelete": "restrict"
+      },
+      "date": { "type": "date", "required": true },
+      "category": { "type": "enums.expenseCategories", "required": true },
+      "label": { "type": "enums.expenseLabels", "required": true },
+      "amount": { "type": "number", "required": true },
+      "currency": { "type": "enums.currencies", "required": true },
+      "reference": {},
+      "notes": {}
+    }
+  }
+}
