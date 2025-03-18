@@ -1,6 +1,7 @@
-import { DataSource } from "typeorm";
+import { Pool } from "pg";
 import dotenv from "dotenv";
 
+/* istanbul ignore next */
 const mode =
   process.env.NODE_ENV === "test"
     ? "test"
@@ -10,17 +11,17 @@ const mode =
 
 dotenv.config({ path: `.env.${mode}` });
 
-const commonOptions = {
-  type: "postgres" as const,
+const pool = new Pool({
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
+  user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  synchronize: mode !== "production",
+});
+
+export const dbClient = {
+  query: (text: string, params?: any[]) => pool.query(text, params),
 };
 
-export const AppDataSource = new DataSource({
-  ...commonOptions,
-  entities: [],
-});
+/* istanbul ignore next */
+export const closeDbConnection = async () => await pool.end();

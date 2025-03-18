@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { ApiError, AppResponseModel } from "../models/app_response.model";
+import { AppError, AppResponseModel } from "../models/app_response.model";
 import { HTTPStatusCodeEnum } from "../enums";
 
 export class AppResponseUtil {
@@ -25,7 +25,7 @@ export class AppResponseUtil {
     res: Response,
     statusCode: HTTPStatusCodeEnum,
     message: string,
-    errors: ApiError[] | null,
+    errors: AppError[] | null,
     meta?: { [key: string]: any }
   ): void {
     const response: AppResponseModel<null> = {

@@ -5,14 +5,13 @@ import { ErrorTypeEnum, HTTPStatusCodeEnum } from "../enums";
 export const notFoundHandlerMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  _: NextFunction
 ) => {
-  const method = req.method;
-  const url = req.originalUrl;
-
-  const message = `The requested URL '${url}' with method '${method}' does not exist. Please check the path and ensure you are using the correct HTTP method (GET, POST, PUT, DELETE, etc.).`;
-
-  AppResponseUtil.error(res, HTTPStatusCodeEnum.NotFound, "Route not found", [
-    { type: ErrorTypeEnum.NotFound, message: message },
-  ]);
+  /* istanbul ignore next */
+  AppResponseUtil.error(
+    res,
+    HTTPStatusCodeEnum.NotFound,
+    `the requested URL '${req.originalUrl}' with method '${req.method}' does not exist. please check the path and ensure you are using the correct HTTP method (GET, POST, PUT, DELETE, etc.).`,
+    [{ type: ErrorTypeEnum.PageNotFound }]
+  );
 };

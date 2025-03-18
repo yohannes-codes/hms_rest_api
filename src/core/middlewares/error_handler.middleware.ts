@@ -4,16 +4,17 @@ import { HTTPStatusCodeEnum } from "../enums";
 
 export const errorHandlerMiddleware = (
   err: any,
-  req: Request,
+  _: Request,
   res: Response,
-  next: NextFunction
+  __: NextFunction
 ) => {
-  console.log("❌ Oops! An error occurred.", err);
-
-  AppResponseUtil.error(
-    res,
-    HTTPStatusCodeEnum.InternalServerError,
-    err.message,
-    err.errors
-  );
+  if (err.isLocallyMadeError)
+    AppResponseUtil.error(res, err.statusCode, err.message, err.errors);
+  else
+    AppResponseUtil.error(
+      res,
+      HTTPStatusCodeEnum.InternalServerError,
+      err.message,
+      err.errors
+    );
 };
